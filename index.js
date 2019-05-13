@@ -14,7 +14,7 @@ var redis = require("redis");
 
 const bodyParser = require('body-parser');
 
-async function testCache() {
+async function testCache(req,res) {
 // Connect to the Azure Cache for Redis over the SSL port using the key.
 var cacheConnection = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, 
   {auth_pass: process.env.REDISCACHEKEY, tls: {servername: process.env.REDISCACHEHOSTNAME}});
@@ -40,9 +40,10 @@ console.log("Cache response : " + await cacheConnection.getAsync("Message"));
 // Get the client list, useful to see if connection list is growing...
 console.log("\nCache command: CLIENT LIST");
 console.log("Cache response : " + await cacheConnection.clientAsync("LIST"));    
+res.send(await cacheConnection.clientAsync("LIST"));
 }
 
-testCache();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
@@ -55,12 +56,12 @@ app.use(function(req, res, next) {
 app.get('/pooling', function (req, res) {
    
    
-
-    res.send('pooling');
+    testCache(req,res);
+    
 });
 app.get('/', function (req, res) {
      res.send('tesi9ng');
 });
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT||8000, function () {
   console.log('Example app listening on port !')
 })
