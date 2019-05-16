@@ -27,7 +27,8 @@ console.log("Cache response : " + await cacheConnection.pingAsync());
 
 // Simple get and put of integral data types into the cache
 console.log("\nCache command: GET Message");
-console.log("Cache response : " + await cacheConnection.getAsync("Message"));    
+console.log("Cache response : " + await cacheConnection.getAsync("Message"));   
+res.send(await cacheConnection.getAsync("Message")); 
 
 console.log("\nCache command: SET Message");
 console.log("Cache response : " + await cacheConnection.setAsync("Message",
@@ -40,7 +41,7 @@ console.log("Cache response : " + await cacheConnection.getAsync("Message"));
 // Get the client list, useful to see if connection list is growing...
 console.log("\nCache command: CLIENT LIST");
 console.log("Cache response : " + await cacheConnection.clientAsync("LIST"));    
-res.send(await cacheConnection.clientAsync("LIST"));
+res.send(await cacheConnection.clientAsync("LIST")); 
 }
 
 
